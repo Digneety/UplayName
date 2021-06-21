@@ -10,8 +10,9 @@ You'll need to install dotNet Framework 5.0 to run it.
 
 Then you enter the names in names.txt like this:
 ```bash
-name1
-name2
-name3
+Digneety
+legalOptinsKey
+Pengu.G2
+...
 ```
 If you have any questions please DM me on Twitter: <a href="https://twitter.com/digneety" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="digneety" height="30" width="40" /></a>
