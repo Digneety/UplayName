@@ -72,7 +72,7 @@ namespace NameCheck
                     {
                         Method = HttpMethod.Get,
                         RequestUri =
-                            new Uri($"https://public-ubiservices.ubi.com/v2/profiles?nameOnPlatform={name}&platformType=uplay"),
+                            new Uri($"https://public-ubiservices.ubi.com/v3/profiles?nameOnPlatform={name}&platformType=uplay"),
                         Headers = {Authorization = new AuthenticationHeaderValue("Ubi_v1", $"t={_token.Ticket}")}
                     };
                     var response = await _httpClient.SendAsync(request);
