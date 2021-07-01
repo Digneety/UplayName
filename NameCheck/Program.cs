@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Configuration;
 
 namespace NameCheck
 {
@@ -115,7 +116,6 @@ namespace NameCheck
                         Console.Title = $"Checked: {_namesChecked} - Available: {_namesAvailable} - Restricted: {_namesRestricted}";
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine($"{name}");
-                        Console.WriteLine($"{content}");
                     }
                 } catch
                 {
@@ -134,7 +134,7 @@ namespace NameCheck
             Console.WriteLine("Connecting to the Ubisoft Servers.");
 
             var basicCredentials = Convert.ToBase64String(
-                Encoding.UTF8.GetBytes("chooseyourown@fucking.mail" + ":" + "andPassword"));
+                Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["mail"] + ":" + ConfigurationManager.AppSettings["password"]));
 
             var request = new HttpRequestMessage
             {
