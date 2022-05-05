@@ -1,0 +1,2 @@
+E:\NameCheck\NameCheck.dll.config
+E:\NameCheck\NameCheck.exe

@@ -126,7 +126,7 @@ namespace NameCheck
 
         private static async Task<UbisoftToken> GetToken()
         {
-            _httpClient.DefaultRequestHeaders.Add("Ubi-AppId", "2c2d31af-4ee4-4049-85dc-00dc74aef88f");
+            _httpClient.DefaultRequestHeaders.Add("Ubi-AppId", "afb4b43c-f1f7-41b7-bcef-a635d8c83822");
             _httpClient.DefaultRequestHeaders.Add("Ubi-RequestedPlatformType", "uplay");
             _httpClient.DefaultRequestHeaders.Add("user-agent",
                 "Mozilla/5.0 (iPhone; CPU iPhone OS 5_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B179 Safari/7534.48.3");
