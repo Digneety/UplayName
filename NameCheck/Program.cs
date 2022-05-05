@@ -86,7 +86,7 @@ namespace NameCheck
                         {
                             Console.ForegroundColor = ConsoleColor.Magenta;
                             Console.WriteLine($"Response from Ubisoft for name '{name}' - \n{content}");
-                            CheckNamesAsync().Dispose();
+                            Console.ReadKey(true);
                             await File.AppendAllTextAsync("failed.txt", content);
                         }
                     }
@@ -116,6 +116,14 @@ namespace NameCheck
                         Console.Title = $"Checked: {_namesChecked} - Available: {_namesAvailable} - Restricted: {_namesRestricted}";
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine($"{name}");
+                    }
+
+                    if (_namesChecked == 2)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("To prevent rate limiting the process will be disposed");
+                        Console.ReadKey(true);
+                        break;
                     }
                 } catch
                 {
