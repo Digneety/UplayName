@@ -146,7 +146,7 @@ namespace NameCheck
             };
             var response = await _httpClient.SendAsync(request);
             if (!response.IsSuccessStatusCode)
-                throw new UnauthorizedAccessException("Unable to retrieve authentication ticket. Thanks ubisoft mf!");
+                throw new UnauthorizedAccessException("Unable to retrieve authentication ticket.");
             return JsonConvert.DeserializeObject<UbisoftToken>(await response.Content.ReadAsStringAsync())!;
         }
     }
