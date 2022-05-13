@@ -4,6 +4,10 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
         <Nullable>enable</Nullable>
+		<ExcludeFilesFromDeployment>bin\**\*.pdb</ExcludeFilesFromDeployment>
+		<WebPublishMethod>FileSystem</WebPublishMethod>
+		<DebugType>none</DebugType>
+		<Configurations>Debug;Release;x</Configurations>
     </PropertyGroup>
 
     <ItemGroup>
