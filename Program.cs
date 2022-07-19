@@ -10,9 +10,7 @@ namespace UbisoftName;
 
 internal static class Program
 {
-    private static UbisoftToken? _token;
-
-    static async Task Main(string[] args)
+    private static async Task Main(string[] args)
     {
         Console.ForegroundColor = ConsoleColor.DarkBlue;
         Console.WriteLine("   ");
