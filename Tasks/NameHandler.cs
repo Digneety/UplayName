@@ -1,6 +1,7 @@
 using System.Configuration;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Security.Authentication;
 using System.Text;
 using Newtonsoft.Json;
 using UbisoftName.Models;
@@ -62,7 +63,6 @@ internal static class NameHandler
             Content = new StringContent("{\"Content-Type\": \"application/json\"}", Encoding.UTF8,
                 "application/json")
         };
-
         var response = await GetHttpClient().SendAsync(request);
         if (!response.IsSuccessStatusCode)
             throw new UnauthorizedAccessException("Unable to retrieve authentication ticket.");
@@ -71,19 +71,30 @@ internal static class NameHandler
 
     private static HttpClient GetHttpClient()
     {
-        var httpClientHandler = new HttpClientHandler
+        if (ConfigurationManager.AppSettings["proxy"] != string.Empty)
         {
-            Proxy = new WebProxy(
-                ConfigurationManager.AppSettings["proxy"] == string.Empty
-                    ? null
-                    : ConfigurationManager.AppSettings["proxy"], false),
-            UseProxy = true
-        };
+            var httpClientHandler = new HttpClientHandler
+            {
+                Proxy = new WebProxy
+                {
+                    Address = new Uri(ConfigurationManager.AppSettings["proxy"]!),
+                    BypassProxyOnLocal = false,
+                    Credentials = new NetworkCredential(ConfigurationManager.AppSettings["proxyUser"],
+                        ConfigurationManager.AppSettings["proxyPassword"]),
+                },
+                UseProxy = true,
+            };
+            var httpClient = new HttpClient(httpClientHandler);
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Add("Ubi-AppId", "afb4b43c-f1f7-41b7-bcef-a635d8c83822");
+            httpClient.DefaultRequestHeaders.Add("Ubi-RequestedPlatformType", "uplay");
+            return httpClient;
+        }
 
-        var httpClient = new HttpClient(httpClientHandler);
-        httpClient.DefaultRequestHeaders.Clear();
-        httpClient.DefaultRequestHeaders.Add("Ubi-AppId", "afb4b43c-f1f7-41b7-bcef-a635d8c83822");
-        httpClient.DefaultRequestHeaders.Add("Ubi-RequestedPlatformType", "uplay");
-        return httpClient;
+        var client = new HttpClient();
+        client.DefaultRequestHeaders.Clear();
+        client.DefaultRequestHeaders.Add("Ubi-AppId", "afb4b43c-f1f7-41b7-bcef-a635d8c83822");
+        client.DefaultRequestHeaders.Add("Ubi-RequestedPlatformType", "uplay");
+        return client;
     }
 }

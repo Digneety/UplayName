@@ -1,9 +1,4 @@
 ﻿using System.Configuration;
-using System.Net;
-using System.Net.Http.Headers;
-using System.Text;
-using Newtonsoft.Json;
-using UbisoftName.Models;
 using UbisoftName.Tasks;
 
 namespace UbisoftName;
@@ -12,6 +7,11 @@ internal static class Program
 {
     private static async Task Main(string[] args)
     {
+        var proxy = ConfigurationManager.AppSettings["proxy"]!
+            .Equals(string.Empty)
+            ? "Sending requests without a proxy"
+            : $"Sending requests via proxy: {ConfigurationManager.AppSettings["proxy"]}";
+
         Console.ForegroundColor = ConsoleColor.DarkBlue;
         Console.WriteLine("   ");
         Console.WriteLine("   ");
@@ -27,7 +27,7 @@ internal static class Program
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.WriteLine("To stop checking names press ESC.");
         Console.ResetColor();
-
+        Console.WriteLine(proxy);
         do
         {
             while (!Console.KeyAvailable)
