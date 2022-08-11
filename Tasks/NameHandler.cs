@@ -1,9 +1,9 @@
 using System.Configuration;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Security.Authentication;
 using System.Text;
 using Newtonsoft.Json;
+using UbisoftName.Exceptions;
 using UbisoftName.Models;
 
 namespace UbisoftName.Tasks;
@@ -14,6 +14,7 @@ internal static class NameHandler
 
     private static uint _namesChecked;
     private static uint _namesAvailable;
+    private static uint _requests;
 
     internal static async Task CheckForNames()
     {
@@ -39,23 +40,37 @@ internal static class NameHandler
                     var content =
                         JsonConvert.DeserializeObject<UbisoftProfile?>(await response.Content.ReadAsStringAsync());
 
-                    if ((bool)content?.Profiles.Any())
+                    _requests += 1;
+                    if (_requests == 250)
                     {
-                        _namesChecked += 1;
-                        Console.Title = $"Checked: {_namesChecked} - Available: {_namesAvailable}";
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"{name}");
-                        Console.ResetColor();
+                        Console.WriteLine(
+                            "Stopped sending requests to prevent rate limiting. Use a proxy to continue checking for names or wait.");
+                        return;
                     }
-                    else
+
+                    switch (content?.Profiles.Any())
                     {
-                        _namesChecked += 1;
-                        _namesAvailable += 1;
-                        Console.Title = $"Checked: {_namesChecked} - Available: {_namesAvailable}";
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"{name}");
-                        Console.ResetColor();
-                        await File.AppendAllLinesAsync(resultingFilePath, new[] { name + " (Available or Restricted)" });
+                        case true:
+                            _namesChecked += 1;
+                            Console.Title = $"Checked: {_namesChecked} - Available: {_namesAvailable}";
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($"{name}");
+                            Console.ResetColor();
+                            break;
+                        case false:
+                            _namesChecked += 1;
+                            _namesAvailable += 1;
+                            Console.Title = $"Checked: {_namesChecked} - Available: {_namesAvailable}";
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"{name}");
+                            Console.ResetColor();
+                            await File.AppendAllLinesAsync(resultingFilePath,
+                                new[] { name + " (Available or Restricted)" });
+                            break;
+                        default:
+                            Console.WriteLine(
+                                $"There seems to be an error receiving information about the profile {name} from Ubisoft.");
+                            return;
                     }
                 }
             }
@@ -88,9 +103,9 @@ internal static class NameHandler
         {
             case true:
                 return JsonConvert.DeserializeObject<UbisoftToken?>(await response.Content.ReadAsStringAsync())!;
-            default:
-                Console.ReadKey(true);
-                throw new UnauthorizedAccessException("Unable to retrieve authentication ticket.");
+            case false:
+                throw new InvalidLoginDataException(
+                    "Unable to retrieve Ubisoft Ticket. Make sure the login details are set to the correct value without any whitespace characters in front of it.");
         }
     }
 
