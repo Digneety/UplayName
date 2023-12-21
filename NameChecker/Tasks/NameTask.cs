@@ -11,10 +11,9 @@ public class NameTask
     private static Token? _token;
     private static uint _namesChecked;
     private static uint _namesAvailable;
-    
+
     public static async Task CheckNamesAsync()
     {
-
         if (_token == null || _token.IsExpired)
         {
             _token = await GetToken();
@@ -96,7 +95,9 @@ public class NameTask
             Content = new StringContent("{\"Content-Type\": \"application/json\"}", Encoding.UTF8,
                 "application/json")
         };
+        
         var response = await (await GetProxyHttpClient()).SendAsync(request);
+        
         return response.IsSuccessStatusCode switch
         {
             true => JsonConvert.DeserializeObject<Token?>(await response.Content.ReadAsStringAsync())!,
@@ -108,6 +109,16 @@ public class NameTask
     private static async Task<HttpClient> GetProxyHttpClient()
     {
         var proxies = await File.ReadAllLinesAsync("proxies.txt");
+
+        if (proxies.Length == 0 || proxies[0] == "")
+        {
+            var proxyLessHttpClient = new HttpClient();
+            proxyLessHttpClient.DefaultRequestHeaders.Clear();
+            proxyLessHttpClient.DefaultRequestHeaders.Add("Ubi-AppId", "e3d5ea9e-50bd-43b7-88bf-39794f4e3d40");
+            proxyLessHttpClient.DefaultRequestHeaders.Add("Ubi-RequestedPlatformType", "uplay");
+            return proxyLessHttpClient;
+        }
+
         var random = new Random();
         var index = random.Next(0, proxies.Length);
         Console.WriteLine(

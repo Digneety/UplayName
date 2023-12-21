@@ -16,6 +16,9 @@ Put the proxies into the `proxies.txt`.
 
 **Example**:
 >http://{ip}:{port}-{username}-{password}
+> 
+
+### If you want to use the program without proxies you need to leave the `proxies.txt` empty.
 
 Remove the curly brackets and replace the placeholders with each respective value.
 
