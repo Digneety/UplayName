@@ -1,3 +1,6 @@
+# UplayName
+A tool to Bulk check the availability of Ubisoft Account Names.
+
 # Installation
 You'll need to install dotNet Framework 7.0 or higher to run it.
 
@@ -16,9 +19,6 @@ Put the proxies into the `proxies.txt`.
 
 **Example**:
 >http://{ip}:{port}-{username}-{password}
->
-
-### If you want to use the program without proxies you need to leave the `proxies.txt` empty.
 
 Remove the curly brackets and replace the placeholders with each respective value.
 
@@ -26,9 +26,9 @@ For the names you want to check put them into the file `names.txt`
 
 **Example**:
 > Account
->
+> 
 > Account
->
+> 
 > Account
 
 ### Additional Info:
